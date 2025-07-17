@@ -6,16 +6,19 @@ class Command(BaseCommand):
     help = 'Seed the database with sample listings'
 
     def handle(self, *args, **kwargs):
-        locations = ['Lagos', 'Abuja', 'Nairobi', 'Accra']
+        titles = [
+            "Cozy Cabin in the Woods", "Luxury City Apartment", "Beachfront Bungalow",
+            "Mountain Retreat", "Modern Studio Downtown"
+        ]
+
         Listing.objects.all().delete()
 
-        for i in range(10):
-            Listing.objects.create(
-                title=f'Sample Listing {i+1}',
-                description='A wonderful place to stay!',
-                location=random.choice(locations),
-                price_per_night=random.uniform(30, 200),
-                available=True
+        for title in titles:
+            listing = Listing.objects.create(
+                title=title,
+                description=f"{title} is a great place to stay!",
+                location=random.choice(['Lagos', 'Abuja', 'Nairobi', 'Cape Town', 'Accra']),
+                price_per_night=random.uniform(50.0, 300.0),
+                available=random.choice([True, False])
             )
-
-        self.stdout.write(self.style.SUCCESS('Successfully seeded the database with sample listings.'))
+            self.stdout.write(self.style.SUCCESS(f"Created listing: {listing.title}"))
